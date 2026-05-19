@@ -1,0 +1,152 @@
+Options -Indexes
+Options -MultiViews
+
+RewriteEngine On
+RewriteBase /
+
+# ─── Security Headers ────────────────────────────────────────
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set X-XSS-Protection "1; mode=block"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+</IfModule>
+
+# ─── Block Sensitive Files ───────────────────────────────────
+<FilesMatch "\.(sql|log|env|git|htpasswd|bak|backup)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# ─── Block Directory Access ──────────────────────────────────
+RewriteRule ^(config|includes|cron|logs|database)/ - [F,L]
+
+# ─── Force HTTPS (aktifkan jika sudah ada SSL) ───────────────
+# RewriteCond %{HTTPS} off
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# ─── Static Assets — langsung serve ─────────────────────────
+RewriteRule ^assets/ - [L]
+RewriteRule ^uploads/ - [L]
+
+# ─── Existing files/dirs — langsung serve ───────────────────
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# ─── Auth Routes ─────────────────────────────────────────────
+RewriteRule ^login/?$           auth/login.php [L,QSA]
+RewriteRule ^register/?$        auth/register.php [L,QSA]
+RewriteRule ^logout/?$          auth/logout.php [L,QSA]
+RewriteRule ^forgot-password/?$ auth/forgot_password.php [L,QSA]
+RewriteRule ^reset-password/?$  auth/reset_password.php [L,QSA]
+
+# ─── Member Pages ────────────────────────────────────────────
+RewriteRule ^dashboard/?$          pages/dashboard.php [L,QSA]
+RewriteRule ^deposit/?$            pages/deposit.php [L,QSA]
+RewriteRule ^withdraw/?$           pages/withdraw.php [L,QSA]
+RewriteRule ^products/?$           pages/products.php [L,QSA]
+RewriteRule ^products/([^/]+)/?$   pages/products.php?slug=$1 [L,QSA]
+RewriteRule ^my-packages/?$        pages/my_packages.php [L,QSA]
+RewriteRule ^referral/?$           pages/referral.php [L,QSA]
+RewriteRule ^history/?$            pages/history.php [L,QSA]
+RewriteRule ^ads/?$                pages/ads.php [L,QSA]
+RewriteRule ^daily-reward/?$       pages/daily_reward.php [L,QSA]
+RewriteRule ^missions/?$           pages/missions.php [L,QSA]
+RewriteRule ^leaderboard/?$        pages/leaderboard.php [L,QSA]
+RewriteRule ^profit-calendar/?$    pages/profit_calendar.php [L,QSA]
+RewriteRule ^notifications/?$      pages/notifications.php [L,QSA]
+RewriteRule ^chat/?$               pages/chat.php [L,QSA]
+RewriteRule ^vip/?$                pages/vip.php [L,QSA]
+RewriteRule ^voucher/?$            pages/voucher.php [L,QSA]
+RewriteRule ^profile/?$            pages/profile.php [L,QSA]
+RewriteRule ^security/?$           pages/security.php [L,QSA]
+RewriteRule ^bank-accounts/?$      pages/bank_account.php [L,QSA]
+RewriteRule ^faq/?$                pages/faq.php [L,QSA]
+RewriteRule ^info/?$               pages/info.php [L,QSA]
+RewriteRule ^contact/?$            pages/contact.php [L,QSA]
+
+# ─── Admin Routes ────────────────────────────────────────────
+RewriteRule ^admin/?$                    admin/index.php [L,QSA]
+RewriteRule ^admin/login/?$              admin/login.php [L,QSA]
+RewriteRule ^admin/members/?$            admin/members.php [L,QSA]
+RewriteRule ^admin/deposits/?$           admin/deposits.php [L,QSA]
+RewriteRule ^admin/withdrawals/?$        admin/withdrawals.php [L,QSA]
+RewriteRule ^admin/products/?$           admin/products.php [L,QSA]
+RewriteRule ^admin/categories/?$         admin/categories.php [L,QSA]
+RewriteRule ^admin/ads/?$                admin/ads.php [L,QSA]
+RewriteRule ^admin/chat/?$               admin/chat.php [L,QSA]
+RewriteRule ^admin/banners/?$            admin/banners.php [L,QSA]
+RewriteRule ^admin/announcements/?$      admin/announcements.php [L,QSA]
+RewriteRule ^admin/daily-rewards/?$      admin/daily_rewards.php [L,QSA]
+RewriteRule ^admin/missions/?$           admin/missions.php [L,QSA]
+RewriteRule ^admin/vouchers/?$           admin/vouchers.php [L,QSA]
+RewriteRule ^admin/vip-settings/?$       admin/vip_settings.php [L,QSA]
+RewriteRule ^admin/commission/?$         admin/commission_settings.php [L,QSA]
+RewriteRule ^admin/popup-settings/?$     admin/popup_settings.php [L,QSA]
+RewriteRule ^admin/notifications/?$      admin/notifications.php [L,QSA]
+RewriteRule ^admin/leaderboard/?$        admin/leaderboard.php [L,QSA]
+RewriteRule ^admin/reports/?$            admin/reports.php [L,QSA]
+RewriteRule ^admin/settings/?$           admin/settings.php [L,QSA]
+RewriteRule ^admin/maintenance/?$        admin/maintenance.php [L,QSA]
+RewriteRule ^admin/admins/?$             admin/admin_users.php [L,QSA]
+RewriteRule ^admin/logs/?$               admin/logs.php [L,QSA]
+RewriteRule ^admin/marquee/?$            admin/marquee.php [L,QSA]
+RewriteRule ^admin/bank-accounts/?$      admin/bank_accounts.php [L,QSA]
+
+# ─── API Routes ──────────────────────────────────────────────
+RewriteRule ^api/chat/?$           api/chat.php [L,QSA]
+RewriteRule ^api/notification/?$   api/notification.php [L,QSA]
+RewriteRule ^api/wallet/?$         api/wallet.php [L,QSA]
+RewriteRule ^api/vip/?$            api/vip.php [L,QSA]
+RewriteRule ^api/mining/?$         api/mining.php [L,QSA]
+
+# ─── Error Pages ─────────────────────────────────────────────
+ErrorDocument 404 /errors/404.php
+ErrorDocument 500 /errors/500.php
+ErrorDocument 403 /errors/403.php
+
+# ─── PHP Settings (Shared Hosting Compatible) ────────────────
+<IfModule mod_php8.c>
+    php_value upload_max_filesize 10M
+    php_value post_max_size 12M
+    php_value max_execution_time 60
+    php_value memory_limit 256M
+    php_flag display_errors Off
+    php_flag log_errors On
+</IfModule>
+<IfModule mod_php7.c>
+    php_value upload_max_filesize 10M
+    php_value post_max_size 12M
+    php_value max_execution_time 60
+    php_value memory_limit 256M
+    php_flag display_errors Off
+    php_flag log_errors On
+</IfModule>
+<IfModule mod_php.c>
+    php_value upload_max_filesize 10M
+    php_value post_max_size 12M
+    php_value max_execution_time 60
+    php_value memory_limit 256M
+    php_flag display_errors Off
+</IfModule>
+
+# ─── Gzip Compression ────────────────────────────────────────
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript
+</IfModule>
+
+# ─── Cache Static Files ──────────────────────────────────────
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpg "access plus 1 month"
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType image/gif "access plus 1 month"
+    ExpiresByType image/webp "access plus 1 month"
+    ExpiresByType image/svg+xml "access plus 1 month"
+    ExpiresByType text/css "access plus 1 week"
+    ExpiresByType application/javascript "access plus 1 week"
+    ExpiresByType application/x-font-woff "access plus 1 year"
+</IfModule>
