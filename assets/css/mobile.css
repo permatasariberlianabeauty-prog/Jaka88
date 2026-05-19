@@ -1,0 +1,139 @@
+/* ============================================================
+   NOXARA — Mobile / Responsive CSS
+   ============================================================ */
+
+/* ── Bottom Navigation ────────────────────────────────────── */
+.nox-bottom-nav {
+  display: none;
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(8,12,24,0.98);
+  border-top: 1px solid var(--border);
+  backdrop-filter: blur(20px);
+  padding: 0 8px env(safe-area-inset-bottom, 8px);
+  height: 64px;
+}
+.nox-bottom-nav__inner {
+  display: flex; align-items: center;
+  height: 100%; max-width: 480px; margin: 0 auto;
+}
+.nox-bottom-nav__item {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 3px; padding: 6px 4px;
+  color: var(--text-disabled); cursor: pointer;
+  transition: var(--transition); text-decoration: none;
+  position: relative;
+}
+.nox-bottom-nav__item.active { color: var(--cyan); }
+.nox-bottom-nav__item svg { width: 22px; height: 22px; }
+.nox-bottom-nav__label { font-size: 9px; font-weight: 600; letter-spacing: 0.3px; }
+.nox-bottom-nav__badge {
+  position: absolute; top: 4px; right: calc(50% - 18px);
+  background: var(--red); color: #fff;
+  font-size: 9px; font-weight: 700;
+  min-width: 14px; height: 14px; border-radius: 7px;
+  display: flex; align-items: center; justify-content: center; padding: 0 3px;
+}
+
+/* ── FAB Center Button ────────────────────────────────────── */
+.nox-bottom-nav__fab {
+  flex: 0 0 56px; position: relative; top: -12px;
+  width: 56px; height: 56px; border-radius: 50%;
+  background: var(--gradient);
+  box-shadow: var(--glow-cyan);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: var(--transition);
+  color: #fff;
+}
+.nox-bottom-nav__fab:hover { transform: scale(1.1); }
+.nox-bottom-nav__fab svg { width: 26px; height: 26px; }
+.nox-bottom-nav__fab-menu {
+  position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
+  background: var(--bg-card); border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg); padding: 8px;
+  min-width: 200px; z-index: 401;
+  display: none;
+}
+.nox-bottom-nav__fab-menu.open { display: block; animation: nox-fadeIn 0.2s ease; }
+.nox-bottom-nav__fab-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 16px; border-radius: var(--radius-md);
+  color: var(--text-primary); font-size: 13px; font-weight: 500;
+  cursor: pointer; transition: var(--transition); text-decoration: none;
+}
+.nox-bottom-nav__fab-item:hover { background: rgba(0,212,255,0.08); color: var(--cyan); }
+.nox-bottom-nav__fab-item svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+/* ── Responsive Breakpoints ───────────────────────────────── */
+@media (max-width: 1024px) {
+  :root { --sidebar-w: 220px; }
+  .nox-stats { grid-template-columns: repeat(2, 1fr); }
+  .nox-grid-4 { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  :root { --sidebar-w: 0px; }
+
+  /* Show bottom nav */
+  .nox-bottom-nav { display: flex; }
+
+  /* Hide sidebar on mobile */
+  .nox-sidebar { transform: translateX(-260px); width: 260px; }
+  .nox-sidebar.open { transform: translateX(0); }
+
+  /* Topbar */
+  .nox-topbar { left: 0; padding: 0 16px; }
+  .nox-topbar__toggle { display: flex; }
+  .nox-topbar__search { display: none; }
+
+  /* Main content */
+  .nox-main { margin-left: 0; }
+  .nox-content { padding: 16px; padding-bottom: 80px; }
+
+  /* Stats */
+  .nox-stats { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .nox-grid-3 { grid-template-columns: 1fr 1fr; }
+  .nox-grid-2 { grid-template-columns: 1fr; }
+
+  /* Cards */
+  .nox-balance-cards { gap: 12px; }
+  .nox-balance-card { flex: 0 0 220px; }
+
+  /* VIP Progress */
+  .nox-vip-progress { padding: 12px 16px; }
+
+  /* Marquee */
+  .nox-marquee-wrap { display: none; }
+
+  /* Modal */
+  .nox-modal { margin: 0 16px; padding: 24px; border-radius: var(--radius-xl) var(--radius-xl) var(--radius-lg) var(--radius-lg); }
+}
+
+@media (max-width: 480px) {
+  .nox-stats { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .nox-stat-card__value { font-size: 16px; }
+  .nox-grid-3 { grid-template-columns: 1fr; }
+  .nox-page-header__title { font-size: 18px; }
+  .nox-balance-card { flex: 0 0 200px; }
+  .nox-balance-card__amount { font-size: 20px; }
+  .nox-content { padding: 12px; padding-bottom: 80px; }
+}
+
+/* ── Mobile Touch Enhancements ────────────────────────────── */
+@media (hover: none) {
+  .nox-btn:active { transform: scale(0.96); }
+  .nox-sidebar__item:active { background: rgba(0,212,255,0.08); }
+  .nox-bottom-nav__item:active { opacity: 0.7; }
+}
+
+/* ── Pull to Refresh ──────────────────────────────────────── */
+.nox-pull-refresh {
+  display: none; text-align: center;
+  padding: 16px; color: var(--text-secondary); font-size: 12px;
+}
+.nox-pull-refresh.active { display: block; animation: nox-spin 1s linear infinite; }
+
+/* ── Mobile Swipe Cards ───────────────────────────────────── */
+.nox-swipe-dots { display: flex; gap: 6px; justify-content: center; margin-top: 12px; }
+.nox-swipe-dot { width: 6px; height: 6px; border-radius: 3px; background: var(--border-light); transition: var(--transition); }
+.nox-swipe-dot.active { width: 20px; background: var(--cyan); }

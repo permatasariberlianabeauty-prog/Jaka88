@@ -1,0 +1,155 @@
+/* ============================================================
+   NOXARA — Animations CSS
+   ============================================================ */
+
+/* ── Page Transition ──────────────────────────────────────── */
+.nox-page-enter { animation: nox-fadeIn 0.35s ease forwards; }
+
+/* ── Glow Animations ──────────────────────────────────────── */
+.nox-glow-animate { animation: nox-glow-pulse 2s ease-in-out infinite; }
+.nox-pulse-dot {
+  display: inline-block; width: 8px; height: 8px;
+  border-radius: 50%; position: relative;
+}
+.nox-pulse-dot::after {
+  content: ''; position: absolute; inset: -3px;
+  border-radius: 50%; animation: nox-pulse-ring 1.5s ease-out infinite;
+}
+.nox-pulse-dot--green { background: var(--green); }
+.nox-pulse-dot--green::after { border: 2px solid var(--green); }
+.nox-pulse-dot--red { background: var(--red); }
+.nox-pulse-dot--red::after { border: 2px solid var(--red); }
+.nox-pulse-dot--amber { background: var(--amber); }
+.nox-pulse-dot--amber::after { border: 2px solid var(--amber); }
+
+@keyframes nox-pulse-ring {
+  0%   { transform: scale(1); opacity: 1; }
+  100% { transform: scale(2); opacity: 0; }
+}
+
+/* ── Coin Rain ────────────────────────────────────────────── */
+.nox-coins-container {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none; z-index: 9998; overflow: hidden;
+}
+.nox-coin {
+  position: absolute; width: 24px; height: 24px;
+  animation: nox-coin-fall 1.5s ease-in forwards;
+  font-size: 20px;
+}
+
+/* ── Confetti ─────────────────────────────────────────────── */
+.nox-confetti-piece {
+  position: absolute; width: 8px; height: 8px;
+  animation: nox-confetti 1.8s ease-in forwards;
+  border-radius: 2px;
+}
+
+/* ── VIP Progress Animated ───────────────────────────────── */
+.nox-vip-ring {
+  position: relative; display: inline-flex;
+  align-items: center; justify-content: center;
+}
+.nox-vip-ring svg { transform: rotate(-90deg); }
+.nox-vip-ring__track { fill: none; stroke: var(--border); stroke-width: 4; }
+.nox-vip-ring__progress {
+  fill: none; stroke-width: 4; stroke-linecap: round;
+  stroke-dasharray: 251; stroke-dashoffset: 251;
+  transition: stroke-dashoffset 1.5s ease;
+}
+.nox-vip-ring__label {
+  position: absolute; text-align: center;
+  font-family: 'Space Grotesk', sans-serif; font-weight: 700;
+}
+
+/* ── Flip Card ────────────────────────────────────────────── */
+.nox-flip-card { perspective: 1000px; cursor: pointer; }
+.nox-flip-card__inner {
+  position: relative; width: 100%; height: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+.nox-flip-card:hover .nox-flip-card__inner,
+.nox-flip-card.flipped .nox-flip-card__inner { transform: rotateY(180deg); }
+.nox-flip-card__front, .nox-flip-card__back {
+  position: absolute; width: 100%; height: 100%;
+  backface-visibility: hidden; border-radius: var(--radius-lg);
+}
+.nox-flip-card__back { transform: rotateY(180deg); background: var(--bg-card); padding: 20px; }
+
+/* ── Number Counter ───────────────────────────────────────── */
+.nox-counter { display: inline-block; }
+
+/* ── Hover Effects ────────────────────────────────────────── */
+.nox-hover-lift { transition: transform var(--transition), box-shadow var(--transition); }
+.nox-hover-lift:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,0.3); }
+
+.nox-hover-glow { transition: box-shadow var(--transition); }
+.nox-hover-glow:hover { box-shadow: var(--glow-cyan); }
+
+/* ── Mining Animation ─────────────────────────────────────── */
+.nox-mining-icon { display: inline-block; }
+.nox-mining-icon--active { animation: nox-mining-bounce 0.5s ease infinite alternate; }
+@keyframes nox-mining-bounce {
+  from { transform: translateY(0) rotate(-5deg); }
+  to   { transform: translateY(-6px) rotate(5deg); }
+}
+
+/* ── Wave Background ──────────────────────────────────────── */
+.nox-wave-bg {
+  position: relative; overflow: hidden;
+}
+.nox-wave-bg::before {
+  content: ''; position: absolute;
+  top: -50%; left: -50%; width: 200%; height: 200%;
+  background: radial-gradient(ellipse at 50% 0%, rgba(0,212,255,0.06) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 100%, rgba(123,47,255,0.06) 0%, transparent 60%);
+  animation: nox-wave-rotate 15s linear infinite;
+  pointer-events: none;
+}
+@keyframes nox-wave-rotate {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* ── Floating Particles ───────────────────────────────────── */
+.nox-particle {
+  position: absolute; border-radius: 50%;
+  background: var(--cyan); opacity: 0.1;
+  animation: nox-float 6s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes nox-float {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.1; }
+  50%       { transform: translateY(-30px) scale(1.1); opacity: 0.2; }
+}
+
+/* ── Drawer Transition ────────────────────────────────────── */
+.nox-drawer {
+  position: fixed; left: 0; top: 0; bottom: 0;
+  z-index: 300; transform: translateX(-100%);
+  transition: transform var(--transition);
+}
+.nox-drawer.open { transform: translateX(0); }
+.nox-drawer-overlay {
+  position: fixed; inset: 0; z-index: 299;
+  background: rgba(0,0,0,0.6); opacity: 0;
+  visibility: hidden; transition: var(--transition);
+}
+.nox-drawer-overlay.open { opacity: 1; visibility: visible; }
+
+/* ── Bottom Sheet ─────────────────────────────────────────── */
+.nox-bottom-sheet {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  z-index: 400; background: var(--bg-card);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  border-top: 1px solid var(--border);
+  padding: 20px 20px 32px;
+  transform: translateY(100%);
+  transition: transform var(--transition);
+}
+.nox-bottom-sheet.open { transform: translateY(0); }
+.nox-bottom-sheet__handle {
+  width: 40px; height: 4px; border-radius: 2px;
+  background: var(--border-light); margin: 0 auto 20px;
+}
